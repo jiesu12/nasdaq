@@ -1,0 +1,11 @@
+target/
+.settings/
+.project
+.classpath
+*.log
+maven-eclipse.xml
+.externalToolBuilders/
+.idea/
+*.iml
+*.swp
+stale_outputs_checked
