@@ -42,7 +42,6 @@ public class Application {
         }
 
         WebDriver driver = createChromeDriver();
-        driver.get("https://www.nasdaq.com/market-activity/dividends");
         driver.get("https://api.nasdaq.com/api/calendar/dividends?date=" + date);
         WebElement jsonElement = driver.findElement(By.tagName("pre"));
         System.out.println(jsonElement.getText());
