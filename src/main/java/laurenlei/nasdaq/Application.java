@@ -1,21 +1,26 @@
 package laurenlei.nasdaq;
 
+import com.google.common.collect.Maps;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static org.openqa.selenium.firefox.GeckoDriverService.GECKO_DRIVER_EXE_PROPERTY;
 
 /**
  * Download Firefox driver - <https://github.com/mozilla/geckodriver/releases>.
+ * Download Chrome driver - <https://chromedriver.chromium.org/downloads>.
  */
-public class NasdaqApplication {
-    private static String USAGE = "Usage: java -jar nasdaq-0.0.1.jar [yyyy-MM-dd]";
+public class Application {
+    private final static String USAGE = "Usage: java -jar nasdaq-0.0.1.jar [yyyy-MM-dd]";
 
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -30,7 +35,7 @@ public class NasdaqApplication {
             System.exit(1);
         }
 
-        WebDriver driver = createDriver();
+        WebDriver driver = createChromeDriver();
         driver.get("https://www.nasdaq.com/market-activity/dividends");
         driver.get("https://api.nasdaq.com/api/calendar/dividends?date=" + date);
         WebElement jsonElement = driver.findElement(By.tagName("pre"));
@@ -38,11 +43,23 @@ public class NasdaqApplication {
         driver.quit();
     }
 
-    public static WebDriver createDriver() {
+    public static WebDriver createFireFoxDriver() {
         System.setProperty(GECKO_DRIVER_EXE_PROPERTY, "geckodriver_linux64");
         FirefoxProfile profile = new FirefoxProfile();
         profile.setPreference("devtools.jsonview.enabled", false);
         FirefoxOptions options = new FirefoxOptions().setProfile(profile);
         return new FirefoxDriver(options);
+    }
+
+    public static WebDriver createChromeDriver() {
+        System.setProperty("webdriver.chrome.driver", "chromedriver_linux64");
+        Map<String, Object> perfs = Maps.newHashMap();
+        ChromeOptions options = new ChromeOptions();
+        // disable Chrome extension, the extensions are usually compressed and
+        // it is a problem for company computer where it can't uncompress the
+        // file because no permission.
+        options.addArguments("args", "disable-extensions");
+        options.setExperimentalOption("prefs", perfs);
+        return new ChromeDriver(options);
     }
 }
