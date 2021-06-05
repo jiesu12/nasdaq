@@ -18,6 +18,12 @@ import static org.openqa.selenium.firefox.GeckoDriverService.GECKO_DRIVER_EXE_PR
 /**
  * Download Firefox driver - <https://github.com/mozilla/geckodriver/releases>.
  * Download Chrome driver - <https://chromedriver.chromium.org/downloads>.
+ *
+ * Run headless in Linux:
+ *   sudo apt-get install xvfb build-essential
+ *   Xvfb :2 -screen 0 1024x768x24 &
+ *   DISPLAY=:2 java -jar nasdaq.jar 2021-06-02
+ *
  */
 public class Application {
     private final static String USAGE = "Usage: java -jar nasdaq-0.0.1.jar [yyyy-MM-dd]";
